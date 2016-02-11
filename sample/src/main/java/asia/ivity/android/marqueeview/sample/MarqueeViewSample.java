@@ -69,12 +69,19 @@ public class MarqueeViewSample extends Activity {
             }
         });*/
 
-        MarqueeView mv = (MarqueeView) findViewById(R.id.marqueeView3);
+
+
+        final MarqueeView mv = (MarqueeView) findViewById(R.id.marqueeView3);
+
+
+        mv.setText("bob");
+
         mv.postDelayed(new Runnable() {
             @Override
             public void run() {
-                final TextView textView3 = (TextView) findViewById(R.id.textView3);
-                textView3.setText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed.");
+
+                //mv.setText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed.");
+
             }
         }, 3000);
 

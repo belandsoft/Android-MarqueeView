@@ -30,8 +30,6 @@ public class MarqueeView extends LinearLayout {
 
     private ScrollView mScrollView;
 
-    //private static final int TEXTVIEW_VIRTUAL_WIDTH = 2000;
-
     private Animation mMoveTextOut = null;
 
     private Paint mPaint;
@@ -60,6 +58,7 @@ public class MarqueeView extends LinearLayout {
 
     private float mTextWidth;
     private int mOriginalGravity;
+    private CharSequence mText;
 
     /**
      * Sets the animation speed.
@@ -249,6 +248,7 @@ public class MarqueeView extends LinearLayout {
         mScrollView = new ScrollView(context);
 
         mTextField = (TextView) getChildAt(0);
+        mTextField.setText(mText);
         mOriginalGravity = mTextField.getGravity();
         removeView(mTextField);
 
@@ -303,6 +303,9 @@ public class MarqueeView extends LinearLayout {
     }
 
     public void setText(CharSequence text) {
+
+        mText = text;
+
         if (mTextField != null) {
             mTextField.setText(text);
         }

@@ -85,7 +85,6 @@
             android:ellipsize="none"
             android:gravity="center"
             android:singleLine="true"
-            android:text="bob"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
