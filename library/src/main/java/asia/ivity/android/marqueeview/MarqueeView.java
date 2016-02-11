@@ -301,4 +301,10 @@ public class MarqueeView extends LinearLayout {
             mTextField.setLayoutParams(lp);
         }
     }
+
+    public void setText(CharSequence text) {
+        if (mTextField != null) {
+            mTextField.setText(text);
+        }
+    }
 }
