@@ -26,13 +26,13 @@ public class MarqueeViewSample extends Activity {
         setContentView(R.layout.main);
 
         // Marquee #1: Configuration using code.
-        final MarqueeView mv = (MarqueeView) findViewById(R.id.marqueeView100);
-        mv.setPauseBetweenAnimations(500);
+        /*final MarqueeView mv = (MarqueeView) findViewById(R.id.marqueeView100);
+
         mv.setSpeed(10);
         getWindow().getDecorView().post(new Runnable() {
             @Override
             public void run() {
-                mv.startMarquee();
+                //mv.startMarquee();
             }
         });
 
@@ -41,7 +41,7 @@ public class MarqueeViewSample extends Activity {
             @Override
             public void run() {
                 textView1.setText(randomStrings[new Random().nextInt(randomStrings.length)]);
-                mv.startMarquee();
+                //mv.startMarquee();
             }
         }, 1000);
 
@@ -59,7 +59,7 @@ public class MarqueeViewSample extends Activity {
         findViewById(R.id.btnStart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                marqueeView3.startMarquee();
+              // marqueeView3.startMarquee();
             }
         });
         findViewById(R.id.btnStop).setOnClickListener(new View.OnClickListener() {
@@ -67,7 +67,17 @@ public class MarqueeViewSample extends Activity {
             public void onClick(View view) {
                 marqueeView3.reset();
             }
-        });
+        });*/
+
+        MarqueeView mv = (MarqueeView) findViewById(R.id.marqueeView3);
+        mv.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final TextView textView3 = (TextView) findViewById(R.id.textView3);
+                textView3.setText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed.");
+            }
+        }, 3000);
+
     }
 
 

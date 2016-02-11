@@ -1,127 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:marquee="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-    >
+    xmlns:marquee="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:text="First MarqueeView"
+  <!--  <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        />
+        android:layout_marginTop="20dp"
+        android:text="First MarqueeView"
+        android:textAppearance="@android:style/TextAppearance" />
 
     <asia.ivity.android.marqueeview.MarqueeView
         android:id="@+id/marqueeView100"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
+            android:ellipsize="none"
             android:singleLine="true"
-            android:ellipsize="end"
-            tools:ignore="HardcodedText"/>
+            android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
+            tools:ignore="HardcodedText" />
     </asia.ivity.android.marqueeview.MarqueeView>
 
     <TextView
-        android:text="Second MarqueeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance"
-        android:layout_marginTop="50dp"
         android:layout_marginBottom="20dp"
-        />
+        android:layout_marginTop="50dp"
+        android:text="Second MarqueeView"
+        android:textAppearance="@android:style/TextAppearance" />
 
-    <!--Marquee #2: Configuration using XML attributes.-->
+    &lt;!&ndash;Marquee #2: Configuration using XML attributes.&ndash;&gt;
     <asia.ivity.android.marqueeview.MarqueeView
         android:id="@+id/marqueeView150"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        marquee:speed="5"
-        marquee:pause="1000"
-        marquee:autoStart="true"
-        >
+        marquee:speed="5">
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:singleLine="true"
             android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
             android:textSize="20sp"
             android:textStyle="bold"
-            android:singleLine="true"
-            android:ellipsize="end"
-            tools:ignore="HardcodedText"/>
+            tools:ignore="HardcodedText" />
     </asia.ivity.android.marqueeview.MarqueeView>
 
     <Button
         android:id="@+id/btnChangeText"
-        android:text="Change MarqueeView 2 text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:text="Change MarqueeView 2 text" />
 
     <TextView
-        android:text="Second MarqueeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        />
+        android:layout_marginTop="20dp"
+        android:text="Second MarqueeView"
+        android:textAppearance="@android:style/TextAppearance" />-->
 
     <!--Marquee #3: Configuration using XML attributes. -->
     <!--Marquee #3: Start / Stop manually. -->
     <asia.ivity.android.marqueeview.MarqueeView
         android:id="@+id/marqueeView3"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        marquee:speed="10"
-        marquee:pause="700"
-        marquee:autoStart="false"
-        >
+        marquee:speed="3">
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do."
+            android:ellipsize="none"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="bob"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:singleLine="true"
-            android:ellipsize="end"
-            tools:ignore="HardcodedText"/>
+            tools:ignore="HardcodedText" />
     </asia.ivity.android.marqueeview.MarqueeView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-        <Button
-            android:id="@+id/btnStop"
-            android:text="Stop"
-            android:layout_width="0dp"
-            android:layout_weight="50"
-            android:layout_height="wrap_content"
-            />
-
-        <Button
-            android:id="@+id/btnStart"
-            android:text="Start"
-            android:layout_width="0dp"
-            android:layout_weight="50"
-            android:layout_height="wrap_content"
-            />
-    </LinearLayout>
 </LinearLayout>
 
