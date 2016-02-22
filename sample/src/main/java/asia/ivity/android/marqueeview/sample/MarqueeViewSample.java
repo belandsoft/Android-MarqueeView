@@ -3,6 +3,7 @@ package asia.ivity.android.marqueeview.sample;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -70,21 +71,19 @@ public class MarqueeViewSample extends Activity {
         });*/
 
 
-
         final MarqueeView mv = (MarqueeView) findViewById(R.id.marqueeView3);
 
 
         mv.setText("bob");
 
-        mv.postDelayed(new Runnable() {
+
+        Button btnChangeText = (Button) findViewById(R.id.btnChangeText);
+        btnChangeText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-
-                //mv.setText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed, Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed.");
-
+            public void onClick(View view) {
+                mv.setText(randomStrings[new Random().nextInt(randomStrings.length)]);
             }
-        }, 3000);
-
+        });
     }
 
 
