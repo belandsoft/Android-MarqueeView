@@ -3,7 +3,8 @@
 
     <declare-styleable name="asia.ivity.android.marqueeview.MarqueeView">
         <attr name="speed" format="integer"/>
-
+        <attr name="textSize" format="dimension"/>
+        <attr name="textColor" format="color"/>
     </declare-styleable>
 
 </resources>
