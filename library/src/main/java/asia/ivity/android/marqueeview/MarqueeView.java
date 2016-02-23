@@ -1,26 +1,22 @@
 package asia.ivity.android.marqueeview;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.os.Build;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -35,7 +31,7 @@ public class MarqueeView extends LinearLayout {
 
     private ScrollView mScrollView;
 
-    private Animation mMoveTextOut = null;
+    private Animation animation = null;
 
     private Paint mPaint;
 
@@ -46,16 +42,17 @@ public class MarqueeView extends LinearLayout {
     private float mTextDifference;
 
     /**
-     * Control the speed. The lower this value, the faster it will scroll.
+     * Control the speed. This value is a percentage of "normal speed".
+     * So 100 will be normal, 50 will be half as slow, 200 will be twice as fast.
      */
-    private static final int DEFAULT_SPEED = 60;
+    private static final int DEFAULT_SPEED = 100;
 
     /**
      * Control the pause between the animations. Also, after starting this activity.
      */
     private static final int DEFAULT_ANIMATION_PAUSE = 2000;
 
-    private int mSpeed = DEFAULT_SPEED;
+    private int mSpeedPercent = DEFAULT_SPEED;
 
     private Interpolator mInterpolator = new LinearInterpolator();
 
@@ -67,6 +64,7 @@ public class MarqueeView extends LinearLayout {
     private CharSequence mText = null;
     private int textColor = -1;
     private float textSize = -1;
+    static float logicalScreenDensity = -1;
 
     /**
      * Sets the animation speed.
@@ -75,7 +73,7 @@ public class MarqueeView extends LinearLayout {
      * @param speed Milliseconds per PX.
      */
     public void setSpeed(int speed) {
-        this.mSpeed = speed;
+        this.mSpeedPercent = speed;
     }
 
     /**
@@ -120,7 +118,7 @@ public class MarqueeView extends LinearLayout {
             return;
         }
 
-        mSpeed = a.getInteger(R.styleable.asia_ivity_android_marqueeview_MarqueeView_speed, DEFAULT_SPEED);
+        mSpeedPercent = a.getInteger(R.styleable.asia_ivity_android_marqueeview_MarqueeView_speed, DEFAULT_SPEED);
         textSize = a.getDimension(R.styleable.asia_ivity_android_marqueeview_MarqueeView_textSize, -1);
         textColor = a.getResourceId(R.styleable.asia_ivity_android_marqueeview_MarqueeView_textColor, -1);
 
@@ -150,6 +148,13 @@ public class MarqueeView extends LinearLayout {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
 
         mInterpolator = new LinearInterpolator();
+
+        // figure out display density only once
+        if(logicalScreenDensity < 0) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            logicalScreenDensity = metrics.density;
+        }
     }
 
     @Override
@@ -175,7 +180,7 @@ public class MarqueeView extends LinearLayout {
     private void startTextFieldAnimation() {
         mAnimationStartRunnable = new Runnable() {
             public void run() {
-                mTextField.startAnimation(mMoveTextOut);
+                mTextField.startAnimation(animation);
             }
         };
         post(mAnimationStartRunnable);
@@ -192,8 +197,8 @@ public class MarqueeView extends LinearLayout {
         if (mTextField != null)
             mTextField.clearAnimation();
 
-        if (mMoveTextOut != null)
-            mMoveTextOut.reset();
+        if (animation != null)
+            animation.reset();
 
         invalidate();
     }
@@ -222,18 +227,18 @@ public class MarqueeView extends LinearLayout {
                 Log.d(TAG, "mTextDifference  : " + mTextDifference);
             }
 
+            int duration = (int) (((measuredWidth + mTextWidth) / logicalScreenDensity) * 6);
 
-            int duration = (int) ((measuredWidth + mTextWidth) * 4);
+            // multiply by speed
+            float scale = (1f/100f) * mSpeedPercent;
+            duration = (int) (duration / scale);
 
-            //final int duration = (int) (mTextDifference * mSpeed);
+            animation = new TranslateAnimation(measuredWidth, -mTextDifference, 0, 0);
+            animation.setDuration(duration);
+            animation.setInterpolator(mInterpolator);
+            animation.setRepeatCount(Animation.INFINITE);
 
-            mMoveTextOut = new TranslateAnimation(measuredWidth, -mTextDifference, 0, 0);
-            mMoveTextOut.setDuration(duration);
-            mMoveTextOut.setInterpolator(mInterpolator);
-            mMoveTextOut.setRepeatCount(Animation.INFINITE);
-
-
-            mMoveTextOut.setAnimationListener(new Animation.AnimationListener() {
+            animation.setAnimationListener(new Animation.AnimationListener() {
                 public void onAnimationStart(Animation animation) {
                     mTextField.setVisibility(VISIBLE);
                     expandTextView();
@@ -250,9 +255,8 @@ public class MarqueeView extends LinearLayout {
         } else {
             mTextField.setGravity(Gravity.CENTER);
             mTextField.setVisibility(VISIBLE);
+            mTextField.invalidate();
         }
-
-
 
     }
 
@@ -268,8 +272,10 @@ public class MarqueeView extends LinearLayout {
     private void cutTextView() {
         if (mTextField.getWidth() != getMeasuredWidth()) {
             ViewGroup.LayoutParams lp = mTextField.getLayoutParams();
-            lp.width = getMeasuredWidth();
+            int newWidth = getMeasuredWidth();
+            lp.width = newWidth;
             mTextField.setLayoutParams(lp);
+            mScrollView.getLayoutParams().width = newWidth;
         }
     }
 
@@ -281,12 +287,12 @@ public class MarqueeView extends LinearLayout {
 
             mTextField.setText(text);
 
-
             reset();
+
+            cutTextView();
 
             prepareAnimation();
 
-            cutTextView();
 
             post(new Runnable() {
                 @Override

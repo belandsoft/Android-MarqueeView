@@ -12,11 +12,16 @@ import asia.ivity.android.marqueeview.MarqueeView;
 
 public class MarqueeViewSample extends Activity {
     final static String[] randomStrings = new String[]{
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed.", "do eiusmod tempor incididunt",
-            "fugiat nulla pariatur. Excepteur sint occaecat cupidatat", "sunt in culpa qui officia", "nisi ut aliquid",
-            "aliquid ex ea commodi consequatur", "inventore veritatis et quasi architecto",
+            "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed. orem ipsum dolor sit amet, consectetur adipisicing elit, sed.",
+            "do eiusmod tempor incididunt",
+            "fugiat nulla pariatur. Excepteur sint occaecat cupidatat",
+            "sunt in culpa qui officia, sunt in culpa qui officia, sunt in culpa qui officia", "nisi ut aliquid",
+            "aliquid ex ea commodi consequatur",
+            "inventore veritatis et quasi architecto",
             "beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem"
     };
+
+    private int stringID = 0;
 
     /**
      * Called when the activity is first created.
@@ -74,14 +79,22 @@ public class MarqueeViewSample extends Activity {
         final MarqueeView mv = (MarqueeView) findViewById(R.id.marqueeView3);
 
 
-        mv.setText("bob");
+
+
 
 
         Button btnChangeText = (Button) findViewById(R.id.btnChangeText);
         btnChangeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mv.setText(randomStrings[new Random().nextInt(randomStrings.length)]);
+                //mv.setText(randomStrings[new Random().nextInt(randomStrings.length)]);
+                mv.setText(randomStrings[stringID]);
+
+                stringID++;
+
+                if(stringID > 6) stringID = 0;
+
+
             }
         });
     }
