@@ -149,8 +149,7 @@ public class MarqueeView extends LinearLayout {
 
         // figure out display density only once
         if (logicalScreenDensity < 0) {
-            DisplayMetrics metrics = new DisplayMetrics();
-            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             logicalScreenDensity = metrics.density;
         }
     }
