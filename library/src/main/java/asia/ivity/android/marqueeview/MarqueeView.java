@@ -1,10 +1,10 @@
 package asia.ivity.android.marqueeview;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -12,6 +12,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Interpolator;
@@ -30,6 +31,8 @@ public class MarqueeView extends LinearLayout {
     private TextView textView;
 
     private ScrollView scrollView;
+
+    View leftShadow, rightShadow;
 
     private Animation animation = null;
 
@@ -62,7 +65,9 @@ public class MarqueeView extends LinearLayout {
     private CharSequence mText = null;
     private int textColor = -1;
     private float textSize = -1;
+    private int edgeEffectColor = -1;
     static float logicalScreenDensity = -1;
+
 
     /**
      * Sets the animation speed.
@@ -119,6 +124,7 @@ public class MarqueeView extends LinearLayout {
         mSpeedPercent = a.getInteger(R.styleable.asia_ivity_android_marqueeview_MarqueeView_speed, DEFAULT_SPEED);
         textSize = a.getDimension(R.styleable.asia_ivity_android_marqueeview_MarqueeView_textSize, -1);
         textColor = a.getResourceId(R.styleable.asia_ivity_android_marqueeview_MarqueeView_textColor, -1);
+        edgeEffectColor = a.getResourceId(R.styleable.asia_ivity_android_marqueeview_MarqueeView_edgeEffectColor, -1);
 
         a.recycle();
     }
@@ -129,6 +135,10 @@ public class MarqueeView extends LinearLayout {
 
         scrollView = (ScrollView) findViewById(R.id.scrollview_internal);
         textView = (TextView) findViewById(R.id.tv_internal);
+        leftShadow = findViewById(R.id.left_shadow_internal);
+        rightShadow = findViewById(R.id.right_shadow_internal);
+
+        setupShadows();
 
         if (textColor > -1)
             textView.setTextColor(getResources().getColor(textColor));
@@ -152,6 +162,31 @@ public class MarqueeView extends LinearLayout {
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
             logicalScreenDensity = metrics.density;
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupShadows() {
+
+        if (edgeEffectColor > -1) {
+            int startColor = getResources().getColor(edgeEffectColor);
+            int endColor = startColor & 0x00FFFFFF; // mask the alpha down to 0
+
+            GradientDrawable gd = new GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT,
+                    new int[]{startColor, endColor});
+            gd.setCornerRadius(0f);
+
+            leftShadow.setBackgroundDrawable(gd);
+
+
+            gd = new GradientDrawable(
+                    GradientDrawable.Orientation.RIGHT_LEFT,
+                    new int[]{startColor, endColor});
+            gd.setCornerRadius(0f);
+
+            rightShadow.setBackgroundDrawable(gd);
+        }
+
     }
 
     @Override
@@ -212,6 +247,9 @@ public class MarqueeView extends LinearLayout {
         mMarqueeNeeded = mTextWidth > measuredWidth;
 
         if (mMarqueeNeeded) {
+            leftShadow.setVisibility(VISIBLE);
+            rightShadow.setVisibility(VISIBLE);
+
             textView.setGravity(Gravity.LEFT);
             textView.setVisibility(INVISIBLE);
 
@@ -252,6 +290,8 @@ public class MarqueeView extends LinearLayout {
             });
 
         } else {
+            leftShadow.setVisibility(GONE);
+            rightShadow.setVisibility(GONE);
             textView.setGravity(Gravity.CENTER);
             textView.setVisibility(VISIBLE);
             textView.invalidate();
